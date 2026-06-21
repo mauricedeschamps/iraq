@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#0a140a">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="SAMURAI MESOPOTAMIA">
+    <link rel="apple-touch-icon" href="icons/icon-192.jpg">
+    <link rel="manifest" href="manifest.json">
+    <title>Iraq National Team - SAMURAI MESOPOTAMIA</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            transition: background-color 0.3s ease, color 0.2s ease, border-color 0.2s ease;
+        }
+
+        :root {
+            --bg-primary: #0a140a;
+            --bg-secondary: #0f1f0f;
+            --bg-card: #162616;
+            --text-primary: #e8f0e8;
+            --text-secondary: #a0b3a0;
+            --text-muted: #6a7c6a;
+            --border: #2a442a;
+            --accent: #1e3a1e;
+            --iraq-red: #CE1126;
+            --iraq-green: #007A3D;
+            --header-bg: #050f05;
+            --btn-hover: #8a0a15;
+            --gk-badge: #3b82f6;
+            --df-badge: #10b981;
+            --mf-badge: #f59e0b;
+            --fw-badge: #ef4444;
+            --coach-badge: #8b5cf6;
+        }
+
+        body.light {
+            --bg-primary: #f0f4f0;
+            --bg-secondary: #e4eae4;
+            --bg-card: #ffffff;
+            --text-primary: #1a2a1a;
+            --text-secondary: #3a4a3a;
+            --text-muted: #6c7a6c;
+            --border: #cbd5cb;
+            --accent: #d4e0d4;
+            --header-bg: #ffffff;
+            --btn-hover: #a00a15;
+        }
+
+        body {
+            font-family: 'Segoe UI', 'Helvetica Neue', 'Noto Sans', system-ui, -apple-system, sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .app-header {
+            background-color: var(--header-bg);
+            padding: 1rem 1.5rem;
+            border-bottom: 3px solid var(--iraq-red);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+            background-color: rgba(var(--header-bg-rgb, 5, 15, 5), 0.95);
+        }
+
+        .header-content {
+            max-width: 1600px;
+            margin: 0 auto;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logo h1 {
+            font-size: 1.5rem;
+            letter-spacing: 2px;
+            color: var(--text-primary);
+        }
+
+        .logo p {
+            font-size: 0.75rem;
+            color: var(--iraq-green);
+            letter-spacing: 1px;
+            font-weight: bold;
+        }
+
+        .controls {
+            display: flex;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 40px;
+            cursor: pointer;
+            font-weight: bold;
+            background-color: var(--accent);
+            color: var(--text-primary);
+            transition: all 0.2s ease;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+            border: 1px solid var(--border);
+        }
+
+        .btn:hover {
+            background-color: var(--iraq-red);
+            transform: scale(1.02);
+            color: white;
+        }
+
+        .tab-bar {
+            display: flex;
+            background-color: var(--bg-secondary);
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 70px;
+            z-index: 99;
+            backdrop-filter: blur(8px);
+        }
+
+        .tab {
+            flex: 1;
+            text-align: center;
+            padding: 1rem 0.5rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s;
+            color: var(--text-secondary);
+            border-bottom: 3px solid transparent;
+        }
+
+        .tab.active {
+            color: var(--iraq-red);
+            border-bottom-color: var(--iraq-red);
+        }
+
+        .carousel-container {
+            width: 100%;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            scroll-behavior: smooth;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: thin;
+        }
+
+        .carousel-container::-webkit-scrollbar {
+            height: 6px;
+            background: var(--bg-secondary);
+        }
+
+        .carousel-container::-webkit-scrollbar-thumb {
+            background: var(--iraq-green);
+            border-radius: 10px;
+        }
+
+        .carousel-track {
+            display: flex;
+            width: 100%;
+        }
+
+        .carousel-panel {
+            flex: 0 0 100%;
+            scroll-snap-align: start;
+            padding: 1.5rem;
+            overflow-y: auto;
+            max-height: calc(100vh - 140px);
+        }
+
+        .cards-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1.2rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 3px solid var(--iraq-green);
+            display: inline-block;
+            color: var(--text-primary);
+        }
+
+        .player-card {
+            background-color: var(--bg-card);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            border: 1px solid var(--border);
+        }
+
+        .player-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(206, 17, 38, 0.2);
+        }
+
+        .coach-card {
+            border-top: 4px solid var(--coach-badge);
+        }
+
+        .card-img {
+            width: 100%;
+            height: 160px;
+            overflow: hidden;
+            background: linear-gradient(135deg, var(--iraq-green), var(--bg-secondary));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .card-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center top;
+        }
+
+        .card-img .no-image {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: white;
+            background: rgba(0,0,0,0.5);
+            padding: 0.2rem 0.8rem;
+            border-radius: 50px;
+        }
+
+        .player-info {
+            padding: 1rem;
+        }
+
+        .player-name {
+            font-size: 1.1rem;
+            font-weight: bold;
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            flex-wrap: wrap;
+        }
+
+        .player-name-en {
+            font-size: 0.75rem;
+            font-weight: normal;
+            color: var(--text-secondary);
+        }
+
+        .player-pos {
+            display: inline-block;
+            padding: 0.15rem 0.5rem;
+            border-radius: 20px;
+            font-size: 0.65rem;
+            font-weight: bold;
+            margin-top: 0.4rem;
+        }
+
+        .pos-gk { background-color: var(--gk-badge); color: white; }
+        .pos-df { background-color: var(--df-badge); color: white; }
+        .pos-mf { background-color: var(--mf-badge); color: white; }
+        .pos-fw { background-color: var(--fw-badge); color: white; }
+        .pos-coach { background-color: var(--coach-badge); color: white; }
+
+        .player-club {
+            font-size: 0.7rem;
+            color: var(--text-secondary);
+            margin-top: 0.4rem;
+        }
+
+        .detail-container {
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 0 1.5rem;
+        }
+
+        .detail-card {
+            background-color: var(--bg-card);
+            border-radius: 28px;
+            overflow: hidden;
+            border: 1px solid var(--border);
+        }
+
+        .detail-img {
+            width: 100%;
+            height: 320px;
+            overflow: hidden;
+            background: linear-gradient(135deg, var(--iraq-green), var(--bg-secondary));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .detail-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center top;
+        }
+
+        .detail-header {
+            padding: 1.5rem;
+            text-align: center;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .detail-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--iraq-red);
+        }
+
+        .detail-name {
+            font-size: 1.8rem;
+            margin-top: 0.3rem;
+        }
+
+        .detail-name-en {
+            font-size: 1rem;
+            color: var(--text-secondary);
+        }
+
+        .detail-body {
+            padding: 1.5rem;
+        }
+
+        .info-row {
+            margin-bottom: 1rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .info-label {
+            font-weight: bold;
+            color: var(--iraq-green);
+            min-width: 120px;
+            display: inline-block;
+        }
+
+        .back-btn {
+            display: block;
+            width: 200px;
+            margin: 2rem auto 1rem;
+            padding: 0.8rem;
+            text-align: center;
+            background-color: var(--accent);
+            border: 1px solid var(--border);
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: bold;
+            color: var(--text-primary);
+        }
+
+        .back-btn:hover {
+            background-color: var(--iraq-red);
+            color: white;
+            border-color: var(--iraq-red);
+        }
+
+        .app-footer {
+            background-color: var(--header-bg);
+            padding: 2rem 1.5rem;
+            margin-top: 2rem;
+            text-align: center;
+            border-top: 2px solid var(--iraq-red);
+        }
+
+        .footer-content {
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
+        .footer-email {
+            color: var(--iraq-green);
+            text-decoration: none;
+            word-break: break-all;
+            font-weight: bold;
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <header class="app-header">
+        <div class="header-content">
+            <div class="logo">
+                <h1 id="site-title">⚽ SAMURAI MESOPOTAMIA</h1>
+                <p id="site-sub">Iraq National Team 2026</p>
+            </div>
+            <div class="controls">
+                <button id="lang-btn" class="btn">🇮🇶 العربية</button>
+                <button id="theme-btn" class="btn">☀️ Light</button>
+            </div>
+        </div>
+    </header>
+
+    <div class="tab-bar" id="tab-bar">
+        <div class="tab" data-index="0" id="tab-0">👤 + 🧤</div>
+        <div class="tab" data-index="1" id="tab-1">🛡️ DF</div>
+        <div class="tab" data-index="2" id="tab-2">⚙️ MF</div>
+        <div class="tab" data-index="3" id="tab-3">⚽ FW</div>
+    </div>
+
+    <main id="app-root">
+        <div id="main-view"></div>
+        <div id="detail-view" class="hidden"></div>
+    </main>
+
+    <footer class="app-footer">
+        <div class="footer-content">
+            <p id="contact-text">Contact us</p>
+            <a href="mailto:mementomorikatsu@gmail.com" class="footer-email">mementomorikatsu@gmail.com</a>
+        </div>
+    </footer>
+
+    <script>
+        // ==================== 監督データ ====================
+        const COACH = {
+            id: "coach",
+            nameJa: "غراهام أرنولد",
+            nameEn: "Graham Arnold",
+            roleJa: "المدرب",
+            roleEn: "Head Coach",
+            prefectureJa: "أستراليا",
+            prefectureEn: "Australia",
+            careerJa: "مدرب سنترال كوست مارينرز (2010-2013) ← سيدني إف سي (2014-2018) ← منتخب أستراليا (2018-2024) ← منتخب العراق (2024-الآن)",
+            careerEn: "Central Coast Mariners (2010-2013) → Sydney FC (2014-2018) → Australia NT (2018-2024) → Iraq NT (2024-present)",
+            majorAchievementsJa: "• الدوري الأسترالي 2012-13 (مارينرز)\n• الدوري الأسترالي 2016-17 (سيدني)\n• كأس أستراليا 2017 (سيدني)\n• كأس العالم 2022 - دور الـ16 (أستراليا)",
+            majorAchievementsEn: "• A-League 2012-13 (Mariners)\n• A-League 2016-17 (Sydney FC)\n• Australia Cup 2017 (Sydney FC)\n• 2022 World Cup Round of 16 (Australia)",
+            descriptionJa: "مدرب أسترالي مخضرم، قاد أستراليا إلى دور الـ16 في كأس العالم 2022. تولى تدريب العراق في 2024 وقادهم للتأهل إلى كأس العالم 2026 بعد غياب 40 عامًا.",
+            descriptionEn: "Experienced Australian coach who led Australia to the Round of 16 at the 2022 World Cup. Took charge of Iraq in 2024 and guided them to the 2026 World Cup after a 40-year absence.",
+            imageUrl: ""
+        };
+
+        // ==================== 選手データ ====================
+        const PLAYERS = {
+            GK: [
+                { num:1, nameJa:"فهد طالب", nameEn:"Fahad Talib", posCode:"GK", posJa:"حارس مرمى", posEn:"Goalkeeper", clubJa:"الطلبة", clubEn:"Al-Talaba", prefectureJa:"بغداد", prefectureEn:"Baghdad", prevClubJa:"", prevClubEn:"", youthJa:"", youthEn:"", jleagueJa:"", jleagueEn:"", imageUrl:"" },
+                { num:12, nameJa:"جلال حسن", nameEn:"Jalal Hassan", posCode:"GK", posJa:"حارس مرمى", posEn:"Goalkeeper", clubJa:"الزوراء", clubEn:"Al-Zawraa", prefectureJa:"بغداد", prefectureEn:"Baghdad", prevClubJa:"", prevClubEn:"", youthJa:"", youthEn:"", jleagueJa:"", jleagueEn:"", imageUrl:"" },
+                { num:22, nameJa:"أحمد باسل", nameEn:"Ahmed Basil", posCode:"GK", posJa:"حارس مرمى", posEn:"Goalkeeper", clubJa:"الشرطة", clubEn:"Al-Shorta", prefectureJa:"بغداد", prefectureEn:"Baghdad", prevClubJa:"", prevClubEn:"", youthJa:"", youthEn:"", jleagueJa:"", jleagueEn:"", imageUrl:"" }
+            ],
+            DF: [
+                { num:3, nameJa:"حسين علي", nameEn:"Hussein Ali", posCode:"DF", posJa:"مدافع", posEn:"Defender", clubJa:"بوجون شتشين", clubEn:"Pogoń Szczecin", prefectureJa:"مالمو", prefectureEn:"Malmö", prevClubJa:"", prevClubEn:"", youthJa:"", youthEn:"", jleagueJa:"", jleagueEn:"", imageUrl:"" },
+                { num:6, nameJa:"مناف يونس", nameEn:"Manaf Younis", posCode:"DF", posJa:"مدافع", posEn:"Defender", clubJa:"الشرطة", clubEn:"Al-Shorta", prefectureJa:"تكريت", prefectureEn:"Tikrit", prevClubJa:"", prevClubEn:"", youthJa:"", youthEn:"", jleagueJa:"", jleagueEn:"", imageUrl:"" },
+                { num:4, nameJa:"زيد تحسين", nameEn:"Zaid Tahseen", posCode:"DF", posJa:"مدافع", posEn:"Defender", clubJa:"باختاكور", clubEn:"Pakhtakor", prefectureJa:"النجف", prefectureEn:"Najaf", prevClubJa:"", prevClubEn:"", youthJa:"", youthEn:"", jleagueJa:"", jleagueEn:"", imageUrl:"" },
+                { num:2, nameJa:"ريبين سولاقا", nameEn:"Rebin Sulaka", posCode:"DF", posJa:"مدافع", posEn:"Defender", clubJa:"بورت إف سي", clubEn:"Port FC", prefectureJa:"أربيل", prefectureEn:"Erbil", prevClubJa:"", prevClubEn:"", youthJa:"", youthEn:"", jleagueJa:"", jleagueEn:"", imageUrl:"" },
+                { num:5, nameJa:"أكام هاشم", nameEn:"Akam Hashim", posCode:"DF", posJa:"مدافع", posEn:"Defender", clubJa:"الزوراء", clubEn:"Al-Zawraa", prefectureJa:"أربيل", prefectureEn:"Erbil", prevClubJa:"", prevClubEn:"", youthJa:"", youthEn:"", jleagueJa:"", jleagueEn:"", imageUrl:"" },
+                { num:23, nameJa:"ميرخاس دوسكي", nameEn:"Merchas Doski", posCode:"DF", posJa:"مدافع", posEn:"Defender", clubJa:"فيكتوريا بلزن", clubEn:"Viktoria Plzeň", prefectureJa:"هانوفر", prefectureEn:"Hanover", prevClubJa:"", prevClubEn:"", youthJa:"", youthEn:"", jleagueJa:"", jleagueEn:"", imageUrl:"" },
+                { num:26, nameJa:"فرانس بطرس", nameEn:"Frans Putros", posCode:"DF", posJa:"مدافع", posEn:"Defender", clubJa:"برسب باندونغ", clubEn:"Persib Bandung", prefectureJa:"آرهوس", prefectureEn:"Aarhus", prevClubJa:"", prevClubEn:"", youthJa:"", youthEn:"", jleagueJa:"", jleagueEn:"", imageUrl:"" },
+                { num:25, nameJa:"مصطفى سعدون", nameEn:"Mustafa Saadoon", posCode:"DF", posJa:"مدافع", posEn:"Defender", clubJa:"الشرطة", clubEn:"Al-Shorta", prefectureJa:"كورجي", prefectureEn:"Corgi", prevClubJa:"", prevClubEn:"", youthJa:"", youthEn:"", jleagueJa:"", jleagueEn:"", imageUrl:"" },
+                { num:15, nameJa:"أحمد مكنزي", nameEn:"Ahmed Maknzi", posCode:"DF", posJa:"مدافع", posEn:"Defender", clubJa:"الكرخة", clubEn:"Al-Karma", prefectureJa:"", prefectureEn:"", prevClubJa:"", prevClubEn:"", youthJa:"", youthEn:"", jleagueJa:"", jleagueEn:"", imageUrl:"" }
+            ],
+            MF: [
+                { num:16, nameJa:"أمير العماري", nameEn:"Amir Al-Ammari", posCode:"MF", posJa:"وسط", posEn:"Midfielder", clubJa:"كراكوفيا", clubEn:"Cracovia", prefectureJa:"يونشوبينغ", prefectureEn:"Jönköping", prevClubJa:"", prevClubEn:"", youthJa:"", youthEn:"", jleagueJa:"", jleagueEn:"", imageUrl:"" },
+                { num:14, nameJa:"زيدان إقبال", nameEn:"Zidane Iqbal", posCode:"MF", posJa:"وسط", posEn:"Midfielder", clubJa:"أوترخت", clubEn:"FC Utrecht", prefectureJa:"مانشستر", prefectureEn:"Manchester", prevClubJa:"", prevClubEn:"", youthJa:"", youthEn:"", jleagueJa:"", jleagueEn:"", imageUrl:"" },
+                { num:8, nameJa:"إبراهيم بايش", nameEn:"Ibrahim Bayesh", posCode:"MF", posJa:"وسط", posEn:"Midfielder", clubJa:"الظفرة", clubEn:"Al-Dhafra", prefectureJa:"بغداد", prefectureEn:"Baghdad", prevClubJa:"", prevClubEn:"", youthJa:"", youthEn:"", jleagueJa:"", jleagueEn:"", imageUrl:"" },
+                { num:7, nameJa:"يوسف أمين", nameEn:"Youssef Amyn", posCode:"MF", posJa:"وسط", posEn:"Midfielder", clubJa:"أيك لارنكا", clubEn:"AEK Larnaca", prefectureJa:"إيسن", prefectureEn:"Essen", prevClubJa:"", prevClubEn:"", youthJa:"", youthEn:"", jleagueJa:"", jleagueEn:"", imageUrl:"" },
+                { num:17, nameJa:"علي جاسم", nameEn:"Ali Jassim", posCode:"MF", posJa:"وسط", posEn:"Midfielder", clubJa:"النجمة", clubEn:"Al-Najma", prefectureJa:"بغداد", prefectureEn:"Baghdad", prevClubJa:"", prevClubEn:"", youthJa:"", youthEn:"", jleagueJa:"", jleagueEn:"", imageUrl:"" },
+                { num:24, nameJa:"زيد إسماعيل", nameEn:"Zaid Ismail", posCode:"MF", posJa:"وسط", posEn:"Midfielder", clubJa:"الطلبة", clubEn:"Al-Talaba", prefectureJa:"بغداد", prefectureEn:"Baghdad", prevClubJa:"", prevClubEn:"", youthJa:"", youthEn:"", jleagueJa:"", jleagueEn:"", imageUrl:"" },
+                { num:20, nameJa:"أيمار شير", nameEn:"Aimar Sher", posCode:"MF", posJa:"وسط", posEn:"Midfielder", clubJa:"ساربسبورغ", clubEn:"Sarpsborg", prefectureJa:"كركوك", prefectureEn:"Kirkuk", prevClubJa:"", prevClubEn:"", youthJa:"", youthEn:"", jleagueJa:"", jleagueEn:"", imageUrl:"" },
+                { num:19, nameJa:"كيفن يعقوب", nameEn:"Kevin Yakob", posCode:"MF", posJa:"وسط", posEn:"Midfielder", clubJa:"آرهوس", clubEn:"AGF", prefectureJa:"غوتنبرغ", prefectureEn:"Gothenburg", prevClubJa:"", prevClubEn:"", youthJa:"", youthEn:"", jleagueJa:"", jleagueEn:"", imageUrl:"" },
+                { num:21, nameJa:"ماركو فرجي", nameEn:"Marko Farji", posCode:"MF", posJa:"وسط", posEn:"Midfielder", clubJa:"فينيزيا", clubEn:"Venezia", prefectureJa:"غريمستاد", prefectureEn:"Grimstad", prevClubJa:"", prevClubEn:"", youthJa:"", youthEn:"", jleagueJa:"", jleagueEn:"", imageUrl:"" },
+                { num:11, nameJa:"أحمد قاسم", nameEn:"Ahmed Qasem", posCode:"MF", posJa:"وسط", posEn:"Midfielder", clubJa:"ناشفيل إس سي", clubEn:"Nashville SC", prefectureJa:"موتالا", prefectureEn:"Motala", prevClubJa:"", prevClubEn:"", youthJa:"", youthEn:"", jleagueJa:"", jleagueEn:"", imageUrl:"" }
+            ],
+            FW: [
+                { num:18, nameJa:"أيمن حسين", nameEn:"Aymen Hussein", posCode:"FW", posJa:"مهاجم", posEn:"Forward", clubJa:"الكرخة", clubEn:"Al-Karma", prefectureJa:"كركوك", prefectureEn:"Kirkuk", prevClubJa:"", prevClubEn:"", youthJa:"", youthEn:"", jleagueJa:"", jleagueEn:"", imageUrl:"" },
+                { num:9, nameJa:"علي الحمادي", nameEn:"Ali Al-Hamadi", posCode:"FW", posJa:"مهاجم", posEn:"Forward", clubJa:"إيبسويتش تاون", clubEn:"Ipswich Town", prefectureJa:"ميسان", prefectureEn:"Maysan", prevClubJa:"", prevClubEn:"", youthJa:"", youthEn:"", jleagueJa:"", jleagueEn:"", imageUrl:"" },
+                { num:10, nameJa:"مهند علي", nameEn:"Mohanad Ali", posCode:"FW", posJa:"مهاجم", posEn:"Forward", clubJa:"دبا", clubEn:"Dibba", prefectureJa:"بغداد", prefectureEn:"Baghdad", prevClubJa:"", prevClubEn:"", youthJa:"", youthEn:"", jleagueJa:"", jleagueEn:"", imageUrl:"" },
+                { num:13, nameJa:"علي يوسف", nameEn:"Ali Yousef", posCode:"FW", posJa:"مهاجم", posEn:"Forward", clubJa:"الطلبة", clubEn:"Al-Talaba", prefectureJa:"بغداد", prefectureEn:"Baghdad", prevClubJa:"", prevClubEn:"", youthJa:"", youthEn:"", jleagueJa:"", jleagueEn:"", imageUrl:"" }
+            ]
+        };
+
+        // ==================== 言語リソース ====================
+        const UI_TEXTS = {
+            en: {
+                siteTitle: "⚽ SAMURAI MESOPOTAMIA",
+                siteSub: "Iraq National Team 2026",
+                contact: "Contact us",
+                back: "← Back to Players",
+                themeLight: "☀️ Light",
+                themeDark: "🌙 Dark",
+                langEn: "🇬🇧 English",
+                langAr: "🇮🇶 العربية",
+                tabCoachGK: "👤 + 🧤",
+                tabDF: "🛡️ DF",
+                tabMF: "⚙️ MF",
+                tabFW: "⚽ FW",
+                coachLabel: "Head Coach",
+                gkLabel: "Goalkeepers",
+                detailLabels: {
+                    position: "Position",
+                    club: "Current Club",
+                    prefecture: "Birthplace",
+                    prevClub: "Previous Club",
+                    youth: "Youth / High School",
+                    jleague: "League History",
+                    career: "Career",
+                    achievements: "Major Achievements",
+                    description: "Profile"
+                }
+            },
+            ar: {
+                siteTitle: "⚽ صاموراي بلاد الرافدين",
+                siteSub: "منتخب العراق 2026",
+                contact: "اتصل بنا",
+                back: "← العودة إلى القائمة",
+                themeLight: "☀️ فاتح",
+                themeDark: "🌙 داكن",
+                langEn: "🇬🇧 English",
+                langAr: "🇮🇶 العربية",
+                tabCoachGK: "👤 المدرب + 🧤 الحراس",
+                tabDF: "🛡️ دفاع",
+                tabMF: "⚙️ وسط",
+                tabFW: "⚽ هجوم",
+                coachLabel: "المدرب",
+                gkLabel: "حراس المرمى",
+                detailLabels: {
+                    position: "المركز",
+                    club: "النادي الحالي",
+                    prefecture: "مكان الميلاد",
+                    prevClub: "النادي السابق",
+                    youth: "الشباب / المدرسة الثانوية",
+                    jleague: "المسيرة المحلية",
+                    career: "المسيرة التدريبية",
+                    achievements: "الإنجازات الرئيسية",
+                    description: "السيرة الذاتية"
+                }
+            }
+        };
+
+        let currentLang = 'en';
+        let currentTheme = 'dark';
+        let activePanel = 0;
+
+        const mainView = document.getElementById('main-view');
+        const detailView = document.getElementById('detail-view');
+        const langBtn = document.getElementById('lang-btn');
+        const themeBtn = document.getElementById('theme-btn');
+        const siteTitle = document.getElementById('site-title');
+        const siteSub = document.getElementById('site-sub');
+        const contactText = document.getElementById('contact-text');
+        const tabs = document.querySelectorAll('.tab');
+        let carouselContainer = null;
+
+        function updateUILanguage() {
+            const t = UI_TEXTS[currentLang];
+            siteTitle.innerText = t.siteTitle;
+            siteSub.innerText = t.siteSub;
+            contactText.innerText = t.contact;
+            langBtn.innerHTML = currentLang === 'en' ? t.langAr : t.langEn;
+            themeBtn.innerHTML = currentTheme === 'dark' ? t.themeLight : t.themeDark;
+            document.getElementById('tab-0').innerText = t.tabCoachGK;
+            document.getElementById('tab-1').innerText = t.tabDF;
+            document.getElementById('tab-2').innerText = t.tabMF;
+            document.getElementById('tab-3').innerText = t.tabFW;
+        }
+
+        function setLanguage(lang) {
+            currentLang = lang;
+            updateUILanguage();
+            if (!mainView.classList.contains('hidden')) {
+                renderCarousel();
+            } else {
+                if (window._currentDetailItem) renderDetail(window._currentDetailItem.item, window._currentDetailItem.isCoach);
+            }
+        }
+
+        function setTheme(theme) {
+            currentTheme = theme;
+            if (theme === 'light') {
+                document.body.classList.add('light');
+                themeBtn.innerHTML = UI_TEXTS[currentLang].themeDark;
+            } else {
+                document.body.classList.remove('light');
+                themeBtn.innerHTML = UI_TEXTS[currentLang].themeLight;
+            }
+        }
+
+        function toggleTheme() {
+            setTheme(currentTheme === 'dark' ? 'light' : 'dark');
+        }
+
+        function renderPlayerImage(imageUrl, altText) {
+            if (imageUrl && imageUrl !== "") {
+                return `<img src="${imageUrl}" alt="${altText}" loading="lazy" onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\\'no-image\\'>📷</div>';">`;
+            } else {
+                return `<div class="no-image">📷</div>`;
+            }
+        }
+
+        function createCard(item, isCoach = false) {
+            const name = currentLang === 'en' ? item.nameEn : item.nameJa;
+            const nameSub = currentLang === 'en' ? item.nameJa : item.nameEn;
+            let pos, club, badgeClass;
+            if (isCoach) {
+                pos = currentLang === 'en' ? item.roleEn : item.roleJa;
+                club = "";
+                badgeClass = "pos-coach";
+            } else {
+                pos = currentLang === 'en' ? item.posEn : item.posJa;
+                club = currentLang === 'en' ? item.clubEn : item.clubJa;
+                badgeClass = `pos-${item.posCode.toLowerCase()}`;
+            }
+            const card = document.createElement('div');
+            card.className = `player-card ${isCoach ? 'coach-card' : ''}`;
+            card.innerHTML = `
+                <div class="card-img">
+                    ${renderPlayerImage(item.imageUrl, name)}
+                </div>
+                <div class="player-info">
+                    <div class="player-name">${name} <span class="player-name-en">${nameSub}</span></div>
+                    <div class="player-pos ${badgeClass}">${pos}</div>
+                    ${!isCoach ? `<div class="player-club">${club}</div>` : ''}
+                </div>
+            `;
+            card.addEventListener('click', () => showDetail(item, isCoach));
+            return card;
+        }
+
+        function renderCarousel() {
+            const t = UI_TEXTS[currentLang];
+            const html = `
+                <div class="carousel-container" id="carousel-container">
+                    <div class="carousel-track" id="carousel-track">
+                        <div class="carousel-panel" data-panel="0">
+                            <div class="cards-list">
+                                <div class="section-title">${t.coachLabel}</div>
+                                <div id="coach-card-area"></div>
+                                <div class="section-title" style="margin-top: 1.5rem;">${t.gkLabel}</div>
+                                <div id="gk-cards-area"></div>
+                            </div>
+                        </div>
+                        <div class="carousel-panel" data-panel="1">
+                            <div class="cards-list" id="df-cards-area"></div>
+                        </div>
+                        <div class="carousel-panel" data-panel="2">
+                            <div class="cards-list" id="mf-cards-area"></div>
+                        </div>
+                        <div class="carousel-panel" data-panel="3">
+                            <div class="cards-list" id="fw-cards-area"></div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            mainView.innerHTML = html;
+            
+            const coachArea = document.getElementById('coach-card-area');
+            if (coachArea) coachArea.appendChild(createCard(COACH, true));
+            
+            const gkArea = document.getElementById('gk-cards-area');
+            if (gkArea) PLAYERS.GK.forEach(p => gkArea.appendChild(createCard(p, false)));
+            
+            const dfArea = document.getElementById('df-cards-area');
+            if (dfArea) PLAYERS.DF.forEach(p => dfArea.appendChild(createCard(p, false)));
+            
+            const mfArea = document.getElementById('mf-cards-area');
+            if (mfArea) PLAYERS.MF.forEach(p => mfArea.appendChild(createCard(p, false)));
+            
+            const fwArea = document.getElementById('fw-cards-area');
+            if (fwArea) PLAYERS.FW.forEach(p => fwArea.appendChild(createCard(p, false)));
+            
+            carouselContainer = document.getElementById('carousel-container');
+            if (carouselContainer) {
+                carouselContainer.addEventListener('scroll', () => {
+                    const scrollLeft = carouselContainer.scrollLeft;
+                    const panelWidth = carouselContainer.clientWidth;
+                    const newIndex = Math.round(scrollLeft / panelWidth);
+                    if (newIndex !== activePanel) {
+                        activePanel = newIndex;
+                        updateActiveTab();
+                    }
+                });
+                carouselContainer.scrollLeft = activePanel * carouselContainer.clientWidth;
+            }
+        }
+
+        function updateActiveTab() {
+            tabs.forEach((tab, idx) => {
+                if (idx === activePanel) tab.classList.add('active');
+                else tab.classList.remove('active');
+            });
+        }
+
+        function switchPanel(index) {
+            if (index === activePanel) return;
+            activePanel = index;
+            if (carouselContainer) {
+                carouselContainer.scrollTo({
+                    left: carouselContainer.clientWidth * activePanel,
+                    behavior: 'smooth'
+                });
+            }
+            updateActiveTab();
+        }
+
+        function showDetail(item, isCoach = false) {
+            window._currentDetailItem = { item, isCoach };
+            renderDetail(item, isCoach);
+            mainView.classList.add('hidden');
+            detailView.classList.remove('hidden');
+            window.scrollTo(0, 0);
+        }
+
+        function renderDetail(p, isCoach) {
+            const t = UI_TEXTS[currentLang];
+            const labels = t.detailLabels;
+            const name = currentLang === 'en' ? p.nameEn : p.nameJa;
+            const nameSub = currentLang === 'en' ? p.nameJa : p.nameEn;
+            if (isCoach) {
+                const role = currentLang === 'en' ? p.roleEn : p.roleJa;
+                const prefecture = currentLang === 'en' ? p.prefectureEn : p.prefectureJa;
+                const career = currentLang === 'en' ? p.careerEn : p.careerJa;
+                const achievements = currentLang === 'en' ? p.majorAchievementsEn : p.majorAchievementsJa;
+                const description = currentLang === 'en' ? p.descriptionEn : p.descriptionJa;
+                detailView.innerHTML = `
+                    <div class="detail-container">
+                        <div class="detail-card">
+                            <div class="detail-img">${renderPlayerImage(p.imageUrl, name)}</div>
+                            <div class="detail-header">
+                                <div class="detail-name">${name}</div>
+                                <div class="detail-name-en">${nameSub}</div>
+                                <div class="player-pos pos-coach" style="margin-top:1rem;">${role}</div>
+                            </div>
+                            <div class="detail-body">
+                                <div class="info-row"><span class="info-label">${labels.position}:</span> ${role}</div>
+                                <div class="info-row"><span class="info-label">${labels.prefecture}:</span> ${prefecture}</div>
+                                <div class="info-row"><span class="info-label">${labels.career}:</span> ${career}</div>
+                                <div class="info-row"><span class="info-label">${labels.achievements}:</span><br>${achievements.replace(/\n/g, '<br>')}</div>
+                                <div class="info-row"><span class="info-label">${labels.description}:</span> ${description}</div>
+                            </div>
+                        </div>
+                        <button id="detail-back-btn" class="back-btn">${t.back}</button>
+                    </div>
+                `;
+            } else {
+                const pos = currentLang === 'en' ? p.posEn : p.posJa;
+                const club = currentLang === 'en' ? p.clubEn : p.clubJa;
+                const prefecture = currentLang === 'en' ? p.prefectureEn : p.prefectureJa;
+                const prevClub = currentLang === 'en' ? p.prevClubEn : p.prevClubJa;
+                const youth = currentLang === 'en' ? p.youthEn : p.youthJa;
+                const jleague = currentLang === 'en' ? p.jleagueEn : p.jleagueJa;
+                const badgeClass = `pos-${p.posCode.toLowerCase()}`;
+                detailView.innerHTML = `
+                    <div class="detail-container">
+                        <div class="detail-card">
+                            <div class="detail-img">${renderPlayerImage(p.imageUrl, name)}</div>
+                            <div class="detail-header">
+                                <div class="detail-number">#${p.num}</div>
+                                <div class="detail-name">${name}</div>
+                                <div class="detail-name-en">${nameSub}</div>
+                                <div class="player-pos ${badgeClass}" style="margin-top:1rem;">${pos}</div>
+                            </div>
+                            <div class="detail-body">
+                                <div class="info-row"><span class="info-label">${labels.position}:</span> ${pos}</div>
+                                <div class="info-row"><span class="info-label">${labels.club}:</span> ${club}</div>
+                                <div class="info-row"><span class="info-label">${labels.prefecture}:</span> ${prefecture}</div>
+                                <div class="info-row"><span class="info-label">${labels.prevClub}:</span> ${prevClub || '—'}</div>
+                                <div class="info-row"><span class="info-label">${labels.youth}:</span> ${youth || '—'}</div>
+                                <div class="info-row"><span class="info-label">${labels.jleague}:</span> ${jleague || '—'}</div>
+                            </div>
+                        </div>
+                        <button id="detail-back-btn" class="back-btn">${t.back}</button>
+                    </div>
+                `;
+            }
+            document.getElementById('detail-back-btn').addEventListener('click', () => {
+                mainView.classList.remove('hidden');
+                detailView.classList.add('hidden');
+                renderCarousel();
+                setTimeout(() => {
+                    if (carouselContainer) carouselContainer.scrollLeft = carouselContainer.clientWidth * activePanel;
+                }, 50);
+            });
+        }
+
+        function init() {
+            setTheme('dark');
+            updateUILanguage();
+            renderCarousel();
+            tabs.forEach((tab, idx) => {
+                tab.addEventListener('click', () => switchPanel(idx));
+            });
+            langBtn.addEventListener('click', () => setLanguage(currentLang === 'en' ? 'ar' : 'en'));
+            themeBtn.addEventListener('click', toggleTheme);
+        }
+
+        init();
+
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('sw.js').then(reg => {
+                    console.log('SW registered:', reg);
+                }).catch(err => {
+                    console.log('SW failed:', err);
+                });
+            });
+        }
+    </script>
+</body>
+</html>
